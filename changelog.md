@@ -18,19 +18,19 @@ Direction:
 [/] Modify the field name id in user account  
 
 ## These are the items you have to accomplished:  
-[x] Add assets to the project.  
-[x] Create includes directory; create navbar and sidebar.  
-[x] Setup database configuration.  
-[x] Create page for List of office.
-[x] Create page for List of employees.  
-[x] Create page for List of transactions.  
-[x] Create page for adding office.  
-[x] Create page for adding employee.  
-[x] Create page for adding transactions.  
-[x] Applying pagination to list of office.  
-[x] Applying pagination to list of employees.  
-[x] Applying pagination to list of transactions.  
-[x] Create search feature in list of transactions.  
+[[/]] Add assets to the project.  
+[[/]] Create includes directory; create navbar and sidebar.  
+[[/]] Setup database configuration.  
+[[/]] Create page for List of office.
+[[/]] Create page for List of employees.  
+[[/]] Create page for List of transactions.  
+[[/]] Create page for adding office.  
+[[/]] Create page for adding employee.  
+[[/]] Create page for adding transactions.  
+[[/]] Applying pagination to list of office.  
+[[/]] Applying pagination to list of employees.  
+[[/]] Applying pagination to list of transactions.  
+[[/]] Create search feature in list of transactions.  
 [x] Create search feature in list of office. (challenge)  
 [x] Create search feature in list of employees. (challenge)  
 [x] Edit page for office.  
