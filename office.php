@@ -23,9 +23,34 @@
 <?php 
     require("config/db.php");
 
+    if (!isset ($_GET['search']) ) {  
+        $search = "";  
+    } else {  
+        $search = $_GET['search'];   
+    }
 
-    $query = "SELECT * FROM office ";
+    $nresults = 25;
 
+    $query = "SELECT * FROM office";
+    $r = mysqli_query($db,$query);
+    $nor = mysqli_num_rows($r);
+
+    $numberOfPage = ceil($nor/$nresults);
+
+    if (!isset ($_GET['page']) ) {  
+        $page = 1;  
+    } else {  
+        $page = $_GET['page'];  
+    }
+
+    $pfirstr = ($page-1) *$nresults;
+
+    if (strlen($search) > 0){
+        $query = 'SELECT * FROM office WHERE office.postal= '. $search . ' ORDER BY name LIMIT '. $pfirstr . ',' . $nresults;
+    }else{
+        $query = 'SELECT * FROM office ORDER BY name LIMIT '. $pfirstr . ',' . $nresults;
+    }
+    
     $r = mysqli_query($db,$query);
 
     $offices =  mysqli_fetch_all($r,MYSQLI_ASSOC);
@@ -47,9 +72,16 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card strpied-tabled-with-hover">
+                            <br/>
+                                <div class="col-md-12">
+                                    <form action="office.php" method="GET">
+                                        <input type="text" name="search" />
+                                        <input type="submit" value="Search" class="btn btn-info btn-fill" />
+                                    </form>
+                                </div>
                                 <br>
                                 <div class="col-md-12" >
-                                <a href="office.php">
+                                <a href="office-add.php">
                                 <button type="submit" class="btn btn-info btn-fill pull-right">Add New Office</button>
                                 </a>
                                 </div>        
@@ -68,6 +100,7 @@
                                             <th>City</th>
                                             <th>Country</th>
                                             <th>Postal</th>
+                                            <th>Action</th>
                                         </thead>
                                         <tbody>
                                             <?php foreach($offices as $office): ?>
@@ -79,6 +112,11 @@
                                                 <td><?php echo $office['city'] ?></td>
                                                 <td><?php echo $office['country'] ?></td>
                                                 <td><?php echo $office['postal'] ?></td>
+                                                <td>
+                                                <a href="office-edit.php?id=<?php echo $office['id'] ?>">
+                                                <button type="submit" class="btn btn-warning btn-fill pull-right">Edit</button>
+                                                </a>
+                                                </td>
                                             </tr>
                                             <?php endforeach; ?>
                                         </tbody>
@@ -88,6 +126,11 @@
                         </div>
                     </div>
                 </div>
+                <?php 
+                  for($page = 1; $page<= $numberOfPage; $page++) {  
+                      echo '<a href = "office.php?page=' . $page . '">' . $page . ' </a>';  
+                  }
+                  ?> 
             </div>
             <footer class="footer">
                 <div class="container-fluid">

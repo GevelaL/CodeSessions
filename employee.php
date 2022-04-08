@@ -20,10 +20,14 @@
 <?php 
     require("config/db.php");
 
-    $nresults = 10;
+    if (!isset ($_GET['search']) ) {  
+        $search = "";  
+    } else {  
+        $search = $_GET['search'];   
+    }
 
 
-
+    $nresults = 25;
 
     $query = "SELECT * FROM employee";
     $r = mysqli_query($db,$query);
@@ -39,13 +43,19 @@
 
     $pfirstr = ($page-1) *$nresults;
 
-    $query = 'SELECT employee.lastname, employee.firstname, employee.address, office.name as 
-    office_name  FROM employee, office WHERE employee.office_id = office.id ORDER BY employee.lastname LIMIT 
-    ' . $pfirstr . ',' . $nresults;
+    if(strlen($search) > 0){
+        $query = 'SELECT employee.id, employee.lastname, employee.firstname, employee.address, office.name as office_name FROM employee,office
+        WHERE employee.office_id = office.id and employee.lastname = '.$search.'ORDER BY employee.lastname LIMIT '. $pfirstr . ',' . $nresults;
+    }else{
+        $query = 'SELECT employee.id,employee.lastname, employee.firstname, employee.address, office.name as office_name FROM employee,office
+        WHERE employee.office_id = office.id ORDER BY employee.lastname LIMIT '. $pfirstr . ',' . $nresults;
+    }
+
+  
+
 
 	// Get Result
-	$result = mysqli_query($db, $query);
-
+    $result = mysqli_query($db, $query);
 	// Fetch Data
 	$employees = mysqli_fetch_all($result, MYSQLI_ASSOC);
 	//var_dump($posts);
@@ -69,9 +79,16 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card strpied-tabled-with-hover">
+                            <br/>
+                                <div class="col-md-12">
+                                    <form action="employee.php" method="GET">
+                                        <input type="text" name="search" />
+                                        <input type="submit" value="Search" class="btn btn-info btn-fill" />
+                                    </form>
+                                </div>
                             <br>
                                 <div class="col-md-12" >
-                                <a href="office.php">
+                                <a href="employee-add.php">
                                 <button type="submit" class="btn btn-info btn-fill pull-right">Add New Employee</button>
                                 </a>
                                 </div>        
@@ -83,9 +100,10 @@
                                 <div class="card-body table-full-width table-responsive">
                                     <table class="table table-hover table-striped">
                                         <thead>
-                                            <th>ID</th>
                                             <th>LastName</th>
                                             <th>FirstName</th>
+                                            <th>Address</th>
+                                            <th>Action</th>
                                         </thead>
                                         <tbody>
                                         <?php foreach($employees as $employee): ?>
@@ -93,6 +111,11 @@
                                                 <td><?php echo $employee['lastname'] ?></td>
                                                 <td><?php echo $employee['firstname'] ?></td>            
                                                 <td><?php echo $employee['address'] ?></td>
+                                                <td>
+                                                <a href="employee-edit.php?id=<?php echo $employee['id'] ?>">
+                                                <button type="submit" class="btn btn-warning btn-fill pull-right">Edit</button>
+                                                </a>
+                                                </td>
                                             </tr>
                                             <?php endforeach; ?>
                                         </tbody>

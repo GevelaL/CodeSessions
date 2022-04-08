@@ -19,12 +19,15 @@
 </head>
 <?php 
     require("config/db.php");
-    $search = "";
-    $search = $_GET['search']; 
-    $nresults = 10;
+    
+    if (!isset ($_GET['search']) ) {  
+        $search = "";  
+    } else {  
+        $search = $_GET['search'];   
+    }
 
-
-
+    
+    $nresults = 25;
 
     $query = "SELECT * FROM transaction";
     $r = mysqli_query($db,$query);
@@ -41,11 +44,11 @@
     $pfirstr = ($page-1) *$nresults;
 
     if (strlen($search) > 0){
-        $query = 'SELECT transaction.datelog, transaction.documentcode, transaction.action, office.name as office_name, CONCAT(employee.lastname,", ", employee.firstname) AS employee_fullname, transaction.remarks  FROM c.transaction, c.employee, c.office
+        $query = 'SELECT transaction.id,transaction.datelog, transaction.documentcode, transaction.action, employee.firstname as office_name, CONCAT(employee.lastname,", ", employee.firstname) AS employee_fullname, transaction.remarks  FROM c.transaction, c.employee, c.office
         WHERE transaction.employee_id=employee.id and transaction.office_id=office.id and transaction.documentcode='. $search . ' ORDER BY transaction.documentcode, transaction.datelog LIMIT ' . $pfirstr . ',' . $nresults;
 
     }else{
-        $query = 'SELECT transaction.datelog, transaction.documentcode, transaction.action, office.name as office_name, CONCAT(employee.lastname,", ", employee.firstname) AS employee_fullname, transaction.remarks  FROM c.transaction, c.employee, c.office
+        $query = 'SELECT transaction.id,transaction.datelog, transaction.documentcode, transaction.action, office.name as office_name, CONCAT(employee.lastname,", ", employee.firstname) AS employee_fullname, transaction.remarks  FROM c.transaction, c.employee, c.office
         WHERE transaction.employee_id=employee.id and transaction.office_id=office.id ORDER BY transaction.documentcode, transaction.datelog LIMIT ' . $pfirstr . ',' . $nresults;
     }
 
@@ -85,7 +88,7 @@
                                 </div>
                                 <br>
                                 <div class="col-md-12" >
-                                <a href="office.php">
+                                <a href="transaction-add.php">
                                 <button type="submit" class="btn btn-info btn-fill pull-right">Add New Transaction</button>
                                 </a>
                                 </div>        
@@ -102,6 +105,7 @@
                                             <th>action</th>
                                             <th>remarks</th>
                                             <th>documentCode</th>
+                                            <th>Action</th>
                                         </thead>
                                         <tbody>
                                         <?php foreach($transactions as $transaction): ?>
@@ -112,6 +116,11 @@
                                                 <td><?php echo $transaction['action'] ?></td>
                                                 <td><?php echo $transaction['remarks'] ?></td>
                                                 <td><?php echo $transaction['documentcode'] ?></td>
+                                                <td>
+                                                <a href="transaction-edit.php?id=<?php echo $transaction['id'] ?>">
+                                                <button type="submit" class="btn btn-warning btn-fill pull-right">Edit</button>
+                                                </a>
+                                                </td>
                                             </tr>
                                             <?php endforeach; ?>
                                         </tbody>
@@ -121,6 +130,11 @@
                         </div>
                     </div>
                 </div>
+                <?php 
+                  for($page = 1; $page<= $numberOfPage; $page++) {  
+                      echo '<a href = "transaction.php?page=' . $page . '">' . $page . ' </a>';  
+                  }
+                  ?> 
             </div>
             <footer class="footer">
                 <div class="container-fluid">

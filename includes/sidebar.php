@@ -7,11 +7,11 @@
             <div class="sidebar-wrapper">
                 <div class="logo">
                     <a href="javascript:;" class="simple-text">
-                      Your Logo
+                      LexterManagement
                     </a>
                 </div>
                 <ul class="nav">
-                    <li class="nav-item active">
+                    <li class="nav-item ">
                         <a class="nav-link" href="./transaction.php">
                             <i class="nc-icon nc-bank"></i>
                             <p>Transactions</p>
